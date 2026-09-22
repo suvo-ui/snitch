@@ -10,7 +10,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(morgan('dev'));
 
-// app.use('/api/auth', authRoutes)
+app.use('/api/auth', authRoutes);
 
 app.get('/health', (_req, res) => {
     res.status(200).json({ message: "server is running" });

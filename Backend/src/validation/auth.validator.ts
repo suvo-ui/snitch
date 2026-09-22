@@ -10,10 +10,12 @@ export const validateResult = (req: Request, res: Response, next: NextFunction) 
 };
 
 export const validateRegister = [
-    body('fullName').notEmpty().isLength({ min: 2 }).withMessage('Full name is required'),
+    body('fullName').optional().isLength({ min: 2 }).withMessage('Full name must be at least 2 characters'),
+    body('name').optional().isLength({ min: 2 }).withMessage('Name must be at least 2 characters'),
     body('email').notEmpty().withMessage('Email is required').isEmail().withMessage('Email is invalid'),
-    body('contact').notEmpty().withMessage('Contact is required').matches(/^[0-9]{10}$/).withMessage('Contact must be at least 10 digits'),
+    body('contact').optional().matches(/^[0-9]{10}$/).withMessage('Contact must be 10 digits'),
     body('password').notEmpty().withMessage('Password is required').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
-    body('role').notEmpty().withMessage('Role is required').isIn(['buyer', 'seller']).withMessage('Role must be either buyer or seller'),
+    body('role').optional().isIn(['buyer', 'seller']).withMessage('Role must be either buyer or seller'),
+    body('isSeller').optional().isBoolean().withMessage('isSeller must be a boolean'),
     validateResult
 ];

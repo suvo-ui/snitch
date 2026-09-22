@@ -7,7 +7,7 @@ import config from "../config/config.js";
 
 const registerUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { fullName, email, contact, password, role } = req.body;
+        const { fullName, name, username, email, contact, password, isSeller } = req.body;
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ message: "User already exists" });
@@ -15,12 +15,16 @@ const registerUser = async (req: Request, res: Response, next: NextFunction) => 
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const user = await User.create({
-            fullName,
+            fullName: fullName || name,
+            username,
             email,
-            contact,
+            contact: contact || "",
             password: hashedPassword,
-            role
+            role: isSeller ? 'seller' : "buyer"
         });
+
+        const userWithoutPassword = user.toObject();
+        delete userWithoutPassword.password;
 
         jwt.sign(
             { id: user._id },
@@ -30,7 +34,7 @@ const registerUser = async (req: Request, res: Response, next: NextFunction) => 
                 if (err) {
                     return res.status(500).json({ message: "Internal server error", error: err.message });
                 }
-                return res.status(201).json({ message: "User created successfully", user, token });
+                return res.status(201).json({ message: "User created successfully", user: userWithoutPassword, token });
             }
         );
     } catch (error: any) {

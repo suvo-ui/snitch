@@ -1,4 +1,5 @@
 import axios from "axios";
+import type { Register } from "../type/auth.interface";
 
 const authApiInstance = axios.create({
     baseURL: "http://localhost:3000/api/auth",
@@ -16,14 +17,9 @@ authApiInstance.interceptors.request.use((config) => {
     return config;
 })
 
-export async function register({ name, username, email, password }: {
-    name: string,
-    username: string,
-    email: string,
-    password: string
-}) {
+export async function register({ name, username, email, password, isSeller }: Register) {
     try {
-        const response = await authApiInstance.post("/register", { name, username, email, password });
+        const response = await authApiInstance.post("/register", { name, username, email, password, isSeller });
         return response.data;
     } catch (error) {
         throw error;

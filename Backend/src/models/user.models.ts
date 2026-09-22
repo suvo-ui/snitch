@@ -3,8 +3,9 @@ import bcrypt from "bcryptjs";
 
 export interface IUser extends Document {
   fullName: string;
+  username?: string;
   email: string;
-  contact: string;
+  contact?: string;
   password?: string;
   role: "buyer" | "seller";
   createdAt: Date;
@@ -18,6 +19,10 @@ const userSchema = new Schema<IUser>(
       required: [true, "Full name is required"],
       trim: true,
     },
+    username: {
+      type: String,
+      trim: true,
+    },
     email: {
       type: String,
       required: [true, "Email is required"],
@@ -27,7 +32,6 @@ const userSchema = new Schema<IUser>(
     },
     contact: {
       type: String,
-      required: [true, "Contact number is required"],
       trim: true,
     },
     password: {
