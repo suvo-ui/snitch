@@ -1,6 +1,8 @@
 export interface Register {
-    name: string;
-    username: string;
+    name?: string;
+    fullName?: string;
+    contactNumber?: string;
+    username?: string;
     email: string;
     password: string;
     isSeller?: boolean;
@@ -11,9 +13,11 @@ export interface User {
     _id?: string;
     name?: string;
     fullName?: string;
+    contactNumber?: string;
     username?: string;
     email: string;
     role?: "buyer" | "seller";
+    isSeller?: boolean;
 }
 
 export interface AuthResponse {
