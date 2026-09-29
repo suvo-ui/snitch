@@ -69,7 +69,9 @@ export default function Register() {
 
     if (!formData.contactNumber.trim()) {
       errors.contactNumber = "Contact number is required";
-    } else if (!/^\d{7,15}$/.test(formData.contactNumber.replace(/[\s-]/g, ""))) {
+    } else if (
+      !/^\d{7,15}$/.test(formData.contactNumber.replace(/[\s-]/g, ""))
+    ) {
       errors.contactNumber = "Please enter a valid phone number (7-15 digits)";
     }
 
@@ -83,7 +85,9 @@ export default function Register() {
     return Object.keys(errors).length === 0;
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     const { name, value, type } = e.target;
     const checked = (e.target as HTMLInputElement).checked;
 
@@ -155,7 +159,6 @@ export default function Register() {
         <div className="w-full max-w-xl">
           {/* Card Container */}
           <div className="bg-white rounded-3xl border border-[#E8E4DC] p-8 sm:p-12 shadow-[0_12px_40px_-12px_rgba(74,107,93,0.06),0_1px_3px_rgba(0,0,0,0.02)] transition-all duration-300">
-            
             {/* Header section with breathing room */}
             <div className="mb-8 text-center sm:text-left">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F5F2EC] border border-[#E8E4DC] text-[#4A6B5D] text-xs font-medium mb-3">
@@ -166,7 +169,8 @@ export default function Register() {
                 Create your account
               </h1>
               <p className="text-sm text-[#64748B] mt-1.5 leading-relaxed">
-                Experience intentional commerce designed with calm, clarity, and precision.
+                Experience intentional commerce designed with calm, clarity, and
+                precision.
               </p>
             </div>
 
@@ -299,7 +303,11 @@ export default function Register() {
                         ))}
                       </select>
                       <div className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-[#64748B]">
-                        <svg className="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
+                        <svg
+                          className="w-3.5 h-3.5"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
                           <path
                             fillRule="evenodd"
                             d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -370,10 +378,17 @@ export default function Register() {
                       onClick={() => setShowPassword(!showPassword)}
                       tabIndex={-1}
                       className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#94A3B8] hover:text-[#475569] transition-colors p-1"
-                      aria-label={showPassword ? "Hide password" : "Show password"}
+                      aria-label={
+                        showPassword ? "Hide password" : "Show password"
+                      }
                     >
                       {showPassword ? (
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
                           <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
@@ -382,7 +397,12 @@ export default function Register() {
                           />
                         </svg>
                       ) : (
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
                           <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
@@ -478,7 +498,8 @@ export default function Register() {
                           )}
                         </div>
                         <p className="text-xs text-[#64748B] mt-0.5 leading-relaxed">
-                          Unlock seller studio, publish collections, manage catalog inventory, and view direct analytics.
+                          Unlock seller studio, publish collections, manage
+                          catalog inventory, and view direct analytics.
                         </p>
                       </div>
                     </div>
@@ -521,6 +542,41 @@ export default function Register() {
                   </button>
                 </div>
 
+                <div className="relative flex items-center py-1">
+                  <div className="flex-1 border-t border-[#E8E4DC]" />
+                  <span className="px-3 text-[11px] text-[#94A3B8]">OR</span>
+                  <div className="flex-1 border-t border-[#E8E4DC]" />
+                </div>
+
+                <a
+                  href="/api/auth/google"
+                  className="w-full h-12 px-6 rounded-xl border border-[#E8E4DC] bg-white hover:bg-[#FBF9F6] active:scale-[0.99] text-[#334155] font-medium text-sm transition-all duration-200 flex items-center justify-center gap-3 cursor-pointer"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fill="#4285F4"
+                      d="M21.35 12.23c0-.72-.06-1.42-.18-2.09H12v3.96h5.24a4.48 4.48 0 0 1-1.94 2.94v2.45h3.14c1.84-1.7 2.91-4.2 2.91-7.26Z"
+                    />
+                    <path
+                      fill="#34A853"
+                      d="M12 21.5c2.63 0 4.84-.87 6.45-2.36l-3.14-2.45c-.87.58-1.98.92-3.31.92-2.54 0-4.7-1.72-5.47-4.03H3.29v2.53A9.74 9.74 0 0 0 12 21.5Z"
+                    />
+                    <path
+                      fill="#FBBC05"
+                      d="M6.53 13.58a5.85 5.85 0 0 1 0-3.16V7.89H3.29a9.75 9.75 0 0 0 0 8.22l3.24-2.53Z"
+                    />
+                    <path
+                      fill="#EA4335"
+                      d="M12 6.39c1.43 0 2.72.49 3.73 1.45l2.8-2.8C16.84 3.48 14.63 2.5 12 2.5a9.74 9.74 0 0 0-8.71 5.39l3.24 2.53C7.3 8.11 9.46 6.39 12 6.39Z"
+                    />
+                  </svg>
+                  Continue with Google
+                </a>
+
                 {/* Terms Disclaimer */}
                 <p className="text-[11px] text-center text-[#94A3B8] leading-normal pt-1">
                   By creating an account, you agree to Snitch’s{" "}
@@ -551,8 +607,18 @@ export default function Register() {
           {/* Footer Tranquility & Trust Badge */}
           <div className="mt-8 text-center text-xs text-[#94A3B8] flex items-center justify-center gap-4">
             <span className="flex items-center gap-1.5">
-              <svg className="w-3.5 h-3.5 text-[#5C8374]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              <svg
+                className="w-3.5 h-3.5 text-[#5C8374]"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                />
               </svg>
               256-bit Encrypted
             </span>

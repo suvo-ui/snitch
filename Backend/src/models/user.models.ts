@@ -10,6 +10,7 @@ export interface IUser extends Document {
   role: "buyer" | "seller";
   createdAt: Date;
   updatedAt: Date;
+  googleId?: string;
 }
 
 const userSchema = new Schema<IUser>(
@@ -36,8 +37,10 @@ const userSchema = new Schema<IUser>(
     },
     password: {
       type: String,
-      required: [true, "Password is required"],
-      select: false
+      required: function (): boolean {
+        return !this.googleId;
+      },
+      select: false,
     },
     role: {
       type: String,
@@ -48,10 +51,13 @@ const userSchema = new Schema<IUser>(
       default: "buyer",
       required: true,
     },
+    googleId: {
+      type: String,
+    },
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 userSchema.pre("save", async function () {
@@ -62,7 +68,7 @@ userSchema.pre("save", async function () {
 
 userSchema.methods.comparePassword = async function (password: string) {
   return await bcrypt.compare(password, this.password);
-}
+};
 
 const User = mongoose.model<IUser>("User", userSchema);
 
