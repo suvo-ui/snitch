@@ -8,6 +8,7 @@ export interface IUser extends Document {
   contact?: string;
   password?: string | undefined;
   role: "buyer" | "seller";
+  roleSelectionRequired: boolean;
   createdAt: Date;
   updatedAt: Date;
   googleId?: string;
@@ -50,6 +51,10 @@ const userSchema = new Schema<IUser>(
       },
       default: "buyer",
       required: true,
+    },
+    roleSelectionRequired: {
+      type: Boolean,
+      default: false,
     },
     googleId: {
       type: String,

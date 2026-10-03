@@ -3,11 +3,22 @@ import {
   validateRegister,
   validateLogin,
 } from "../validation/auth.validator.js";
-import { registerUser, loginUser } from "../controllers/auth.controller.js";
+import {
+  registerUser,
+  loginUser,
+  googleCallback,
+  getCurrentUser,
+  selectAccountRole,
+} from "../controllers/auth.controller.js";
+import { authenticateUser } from "../middleware/auth.middleware.js";
 import passport from "passport";
-import { googleCallback } from "../controllers/auth.controller.js";
-const router = Router();
+import config from "../config/config.js";
 
+const router = Router();
+const frontendLoginUrl = `${config.FRONTEND_URL.replace(/\/$/, "")}/login`;
+
+router.get("/me", getCurrentUser);
+router.patch("/role", authenticateUser, selectAccountRole);
 router.post("/register", validateRegister, registerUser);
 router.post("/login", validateLogin, loginUser);
 
@@ -18,7 +29,7 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "/login",
+    failureRedirect: frontendLoginUrl,
     session: false,
   }),
   googleCallback,

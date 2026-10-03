@@ -30,7 +30,7 @@ const registerUser = async (
     delete userWithoutPassword.password;
 
     jwt.sign(
-      { id: user._id },
+      { id: user._id, role: user.role },
       config.JWT_SECRET,
       { expiresIn: "1d" },
       (err, token) => {
@@ -86,7 +86,7 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
     delete userWithoutPassword.password;
 
     jwt.sign(
-      { id: user._id },
+      { id: user._id, role: user.role },
       config.JWT_SECRET,
       { expiresIn: "1d" },
       (err, token) => {
@@ -127,7 +127,11 @@ const googleCallback = async (
       }
     | undefined;
 
-  if (!googleUser?.id || !googleUser.displayName || !googleUser.emails?.[0]?.value) {
+  if (
+    !googleUser?.id ||
+    !googleUser.displayName ||
+    !googleUser.emails?.[0]?.value
+  ) {
     return res.status(400).json({ message: "Invalid Google profile" });
   }
 
@@ -143,12 +147,14 @@ const googleCallback = async (
       email,
       googleId: id,
       fullName: displayName,
+      roleSelectionRequired: true,
     });
   }
 
   const token = jwt.sign(
     {
       id: user.id,
+      role: user.role,
     },
     config.JWT_SECRET,
     {
@@ -156,10 +162,102 @@ const googleCallback = async (
     },
   );
 
-  res.cookie("token", token);
+  res.cookie("token", token, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: false,
+    maxAge: 3 * 24 * 60 * 60 * 1000,
+  });
 
   const frontendUrl = config.FRONTEND_URL || "http://localhost:5173";
-  res.redirect(`${frontendUrl.replace(/\/$/, "")}/`);
+  const redirectPath = user.roleSelectionRequired ? "/choose-role" : "/";
+  res.redirect(`${frontendUrl.replace(/\/$/, "")}${redirectPath}`);
 };
 
-export { registerUser, loginUser, googleCallback };
+const getCurrentUser = async (req: Request, res: Response) => {
+  try {
+    const token =
+      req.cookies?.token || req.headers.authorization?.split(" ")[1];
+
+    if (!token) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+
+    const decoded = jwt.verify(token, config.JWT_SECRET) as { id: string };
+    const user = await User.findById(decoded.id).select("-password");
+
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
+    }
+
+    return res.status(200).json({
+      user: {
+        _id: user._id,
+        fullName: user.fullName,
+        email: user.email,
+        username: user.username,
+        contact: user.contact,
+        role: user.role,
+        roleSelectionRequired: user.roleSelectionRequired === true,
+        googleId: user.googleId,
+      },
+      token,
+    });
+  } catch (error) {
+    return res.status(401).json({ message: "Invalid or expired token" });
+  }
+};
+
+const selectAccountRole = async (req: Request, res: Response) => {
+  const selectedRole = req.body?.role;
+  if (selectedRole !== "buyer" && selectedRole !== "seller") {
+    return res
+      .status(400)
+      .json({ message: "A valid account role is required" });
+  }
+
+  const authenticatedUser = req.user as { id: string } | undefined;
+  if (!authenticatedUser?.id) {
+    return res.status(401).json({ message: "Not authenticated" });
+  }
+
+  try {
+    const user = await User.findOneAndUpdate(
+      { _id: authenticatedUser.id, roleSelectionRequired: true },
+      { $set: { role: selectedRole, roleSelectionRequired: false } },
+      { new: true, runValidators: true },
+    ).select("-password");
+
+    if (!user) {
+      return res
+        .status(409)
+        .json({ message: "Role selection is not pending for this account" });
+    }
+
+    return res.status(200).json({
+      message: "Account role saved",
+      user: {
+        _id: user._id,
+        fullName: user.fullName,
+        email: user.email,
+        username: user.username,
+        contact: user.contact,
+        role: user.role,
+        roleSelectionRequired: false,
+        googleId: user.googleId,
+      },
+    });
+  } catch (error: any) {
+    return res
+      .status(500)
+      .json({ message: "Unable to save account role", error: error.message });
+  }
+};
+
+export {
+  registerUser,
+  loginUser,
+  googleCallback,
+  getCurrentUser,
+  selectAccountRole,
+};
