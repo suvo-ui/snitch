@@ -6,13 +6,23 @@ import RequireRoleSelection from "../features/auth/components/RequireRoleSelecti
 import RoleSelection from "../features/auth/pages/RoleSelection";
 import CreateProduct from "../features/products/pages/CreateProduct";
 import Dashboard from "../features/products/pages/Dashboard";
+import AllProducts from "../features/products/pages/AllProducts";
+import ProductDetails from "../features/products/pages/ProductDetails";
 
 export const routes = createBrowserRouter([
   {
     path: "/",
     element: (
       <Protected>
-        <h1 className="text-5xl underline p-8">Hello World</h1>
+        <AllProducts />
+      </Protected>
+    ),
+  },
+  {
+    path: "/products/:productId",
+    element: (
+      <Protected>
+        <ProductDetails />
       </Protected>
     ),
   },
@@ -38,7 +48,7 @@ export const routes = createBrowserRouter([
       {
         path: "/seller/create-product",
         element: (
-          <Protected>
+          <Protected requiredRole="seller">
             <CreateProduct />
           </Protected>
         ),
@@ -46,7 +56,7 @@ export const routes = createBrowserRouter([
       {
         path: "/seller/dashboard",
         element: (
-          <Protected>
+          <Protected requiredRole="seller">
             <Dashboard />
           </Protected>
         ),

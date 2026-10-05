@@ -2,7 +2,9 @@ import express from "express";
 import { authenticateSeller } from "../middleware/auth.middleware.js";
 import {
   createProduct,
+  getSellerProducts,
   getProducts,
+  getProductById,
 } from "../controllers/product.controller.js";
 import { validateCreateProduct } from "../validation/product.validator.js";
 import multer from "multer";
@@ -21,6 +23,10 @@ router.post(
   createProduct,
 );
 
-router.get("/seller", authenticateSeller, getProducts);
+router.get("/seller", authenticateSeller, getSellerProducts);
+
+router.get("/", getProducts);
+
+router.get("/products/:productId", getProductById);
 
 export default router;

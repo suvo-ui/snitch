@@ -6,13 +6,7 @@ import type { RootState } from "../../../app/app.store";
 
 export default function RoleSelection() {
   const navigate = useNavigate();
-  const user = useSelector(
-    (state: RootState) =>
-      state.auth.user as {
-        email?: string;
-        roleSelectionRequired?: boolean;
-      } | null,
-  );
+  const user = useSelector((state: RootState) => state.auth.user);
   const { handleSelectRole, loading, error: serverError } = useAuth();
   const [selectedRole, setSelectedRole] = useState<"buyer" | "seller">("buyer");
   const [isSubmitting, setIsSubmitting] = useState(false);

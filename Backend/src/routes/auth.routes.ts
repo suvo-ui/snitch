@@ -17,7 +17,7 @@ import config from "../config/config.js";
 const router = Router();
 const frontendLoginUrl = `${config.FRONTEND_URL.replace(/\/$/, "")}/login`;
 
-router.get("/me", getCurrentUser);
+router.get("/me", authenticateUser, getCurrentUser);
 router.patch("/role", authenticateUser, selectAccountRole);
 router.post("/register", validateRegister, registerUser);
 router.post("/login", validateLogin, loginUser);

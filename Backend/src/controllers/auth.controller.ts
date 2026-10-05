@@ -1,4 +1,5 @@
 import User from "../models/user.models.js";
+import type { IUser } from "../models/user.models.js";
 import type { Request, Response, NextFunction } from "express";
 import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
@@ -174,38 +175,25 @@ const googleCallback = async (
   res.redirect(`${frontendUrl.replace(/\/$/, "")}${redirectPath}`);
 };
 
-const getCurrentUser = async (req: Request, res: Response) => {
-  try {
-    const token =
-      req.cookies?.token || req.headers.authorization?.split(" ")[1];
+const getCurrentUser = (req: Request, res: Response) => {
+  const user = req.user as IUser | undefined;
 
-    if (!token) {
-      return res.status(401).json({ message: "Not authenticated" });
-    }
-
-    const decoded = jwt.verify(token, config.JWT_SECRET) as { id: string };
-    const user = await User.findById(decoded.id).select("-password");
-
-    if (!user) {
-      return res.status(401).json({ message: "User not found" });
-    }
-
-    return res.status(200).json({
-      user: {
-        _id: user._id,
-        fullName: user.fullName,
-        email: user.email,
-        username: user.username,
-        contact: user.contact,
-        role: user.role,
-        roleSelectionRequired: user.roleSelectionRequired === true,
-        googleId: user.googleId,
-      },
-      token,
-    });
-  } catch (error) {
-    return res.status(401).json({ message: "Invalid or expired token" });
+  if (!user) {
+    return res.status(401).json({ message: "Not authenticated" });
   }
+
+  return res.status(200).json({
+    user: {
+      _id: user._id,
+      fullName: user.fullName,
+      email: user.email,
+      username: user.username,
+      contact: user.contact,
+      role: user.role,
+      roleSelectionRequired: user.roleSelectionRequired === true,
+      googleId: user.googleId,
+    },
+  });
 };
 
 const selectAccountRole = async (req: Request, res: Response) => {

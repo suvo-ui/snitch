@@ -261,7 +261,7 @@ export default function CreateProduct() {
 
           {/* Brand + Breadcrumb */}
           <div className="flex items-center gap-8">
-            <Link to="/" className="flex items-center gap-2.5 group flex-shrink-0">
+            <Link to="/" className="flex items-center gap-2.5 group shrink-0">
               <div className="w-8 h-8 rounded-xl bg-[#4A6B5D] text-white flex items-center justify-center font-serif text-lg font-bold shadow-sm transition-transform duration-300 group-hover:scale-105">
                 S
               </div>
@@ -300,7 +300,7 @@ export default function CreateProduct() {
               <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#4A6B5D] ring-2 ring-[#FAF8F5]" />
             </button>
 
-            <div className="h-5 w-[1px] bg-[#E8E4DC] hidden sm:block" />
+            <div className="h-5 w-px bg-[#E8E4DC] hidden sm:block" />
 
             <div className="flex items-center gap-2 pl-1 py-1 rounded-xl pr-2 hover:bg-[#F5F2EC] cursor-pointer transition-colors border border-[#E8E4DC]">
               <div className="w-7 h-7 rounded-lg bg-[#EAE8E5] border border-[#E8E4DC] flex items-center justify-center font-semibold text-xs text-[#4A6B5D]">
@@ -345,7 +345,7 @@ export default function CreateProduct() {
 
                 {serverError && (
                   <div className="mb-6 p-4 rounded-2xl bg-[#A35C5C]/10 border border-[#A35C5C]/30 text-[#A35C5C] text-sm flex items-center gap-3">
-                    <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <span>{serverError}</span>
@@ -494,7 +494,7 @@ export default function CreateProduct() {
                     {/* Image Thumbnail Tray */}
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                       {images.map((img) => (
-                        <div key={img.id} className="relative group rounded-xl overflow-hidden border-2 border-[#4A6B5D] aspect-[3/4] bg-[#F5F2EC] shadow-sm">
+                        <div key={img.id} className="relative group rounded-xl overflow-hidden border-2 border-[#4A6B5D] aspect-3/4 bg-[#F5F2EC] shadow-sm">
                           <img
                             src={img.preview}
                             alt={img.label}
@@ -525,7 +525,7 @@ export default function CreateProduct() {
                         <div
                           key={slot.label}
                           onClick={() => fileInputRef.current?.click()}
-                          className="relative rounded-xl border border-dashed border-[#E8E4DC] bg-[#F5F2EC]/60 aspect-[3/4] flex flex-col items-center justify-center p-3 text-center hover:border-[#4A6B5D]/50 cursor-pointer transition-colors"
+                          className="relative rounded-xl border border-dashed border-[#E8E4DC] bg-[#F5F2EC]/60 aspect-3/4 flex flex-col items-center justify-center p-3 text-center hover:border-[#4A6B5D]/50 cursor-pointer transition-colors"
                         >
                           <svg className="w-5 h-5 text-[#94A3B8] mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -590,7 +590,7 @@ export default function CreateProduct() {
               <div className="bg-white border border-[#E8E4DC] rounded-3xl overflow-hidden shadow-[0_12px_40px_-12px_rgba(74,107,93,0.08)] group">
 
                 {/* Product Image */}
-                <div className="relative aspect-[3/4] w-full bg-[#F5F2EC] overflow-hidden">
+                <div className="relative aspect-3/4 w-full bg-[#F5F2EC] overflow-hidden">
                   {images.length > 0 ? (
                     <img
                       src={images[0].preview}
@@ -662,7 +662,7 @@ export default function CreateProduct() {
 
               {/* Editorial Note */}
               <div className="p-4 rounded-2xl bg-[#C6EAD8]/20 border border-[#E8E4DC] flex items-start gap-3">
-                <svg className="w-5 h-5 text-[#4A6B5D] flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-5 h-5 text-[#4A6B5D] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                 </svg>
                 <p className="text-[11px] text-[#64748B] leading-relaxed">

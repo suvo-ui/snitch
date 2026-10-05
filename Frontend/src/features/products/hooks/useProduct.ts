@@ -1,14 +1,22 @@
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { createProduct, getProducts } from "../services/product.api";
-import { setSellerProducts } from "../state/product.slice";
+import {
+  createProduct,
+  getProductById,
+  getSellerProducts,
+} from "../services/product.api";
+import {
+  setSellerProducts,
+  setProducts,
+  setProduct,
+} from "../state/product.slice";
 
 export const useProduct = () => {
   const dispatch = useDispatch();
 
-  const fetchProducts = useCallback(async (): Promise<void> => {
+  const fetchSellerProducts = useCallback(async (): Promise<void> => {
     try {
-      const products = await getProducts();
+      const products = await getSellerProducts();
       dispatch(setSellerProducts(products));
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -21,7 +29,7 @@ export const useProduct = () => {
       try {
         const newProduct = await createProduct(productData);
         try {
-          const products = await getProducts();
+          const products = await getSellerProducts();
           dispatch(setSellerProducts(products || [newProduct]));
         } catch {
           dispatch(setSellerProducts([newProduct]));
@@ -35,5 +43,33 @@ export const useProduct = () => {
     [dispatch],
   );
 
-  return { fetchProducts, addProduct };
+  const fetchAllProducts = useCallback(async (): Promise<void> => {
+    try {
+      const products = await getSellerProducts();
+      dispatch(setProducts(products));
+    } catch (error) {
+      console.error("Error fetching all products:", error);
+      throw error;
+    }
+  }, [dispatch]);
+
+  const fetchProductById = useCallback(
+    async (productId: string): Promise<void> => {
+      try {
+        const product = await getProductById(productId);
+        dispatch(setProduct(product));
+      } catch (error) {
+        console.error(`Error fetching product with ID ${productId}:`, error);
+        throw error;
+      }
+    },
+    [dispatch],
+  );
+
+  return {
+    fetchSellerProducts,
+    addProduct,
+    fetchAllProducts,
+    fetchProductById,
+  };
 };

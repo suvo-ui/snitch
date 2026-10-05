@@ -56,7 +56,7 @@ export async function createProduct(req: Request, res: Response) {
   }
 }
 
-export async function getProducts(req: Request, res: Response) {
+export async function getSellerProducts(req: Request, res: Response) {
   try {
     const seller = req.user as IUser | undefined;
 
@@ -69,6 +69,43 @@ export async function getProducts(req: Request, res: Response) {
     res.status(200).json({
       message: "Products retrieved successfully",
       products,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Internal server error",
+      error: error instanceof Error ? error.message : String(error),
+    });
+  }
+}
+
+export async function getProducts(_req: Request, res: Response) {
+  try {
+    const products = await Product.find();
+
+    return res.status(200).json({
+      message: "Products retrieved successfully",
+      products,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Internal server error",
+      error: error instanceof Error ? error.message : String(error),
+    });
+  }
+}
+
+export async function getProductById(req: Request, res: Response) {
+  try {
+    const { productId } = req.params;
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    res.status(200).json({
+      message: "Product retrieved successfully",
+      product,
     });
   } catch (error) {
     res.status(500).json({

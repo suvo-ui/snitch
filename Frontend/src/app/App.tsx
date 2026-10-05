@@ -8,8 +8,8 @@ function App() {
   const { hydrateUser } = useAuth();
 
   useEffect(() => {
-    hydrateUser();
-  }, []);
+    void hydrateUser();
+  }, [hydrateUser]);
 
   return (
     <>

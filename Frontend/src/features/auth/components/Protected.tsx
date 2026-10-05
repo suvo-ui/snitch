@@ -5,13 +5,11 @@ import type { RootState } from "../../../app/app.store";
 
 interface ProtectedProps {
   children: ReactNode;
+  requiredRole?: "buyer" | "seller";
 }
 
-const Protected = ({ children }: ProtectedProps) => {
-  const user = useSelector(
-    (state: RootState) =>
-      state.auth.user as { roleSelectionRequired?: boolean } | null,
-  );
+const Protected = ({ children, requiredRole }: ProtectedProps) => {
+  const user = useSelector((state: RootState) => state.auth.user);
   const loading = useSelector((state: RootState) => state.auth.loading);
 
   if (loading) {
@@ -24,6 +22,10 @@ const Protected = ({ children }: ProtectedProps) => {
 
   if (user.roleSelectionRequired) {
     return <Navigate to="/choose-role" replace />;
+  }
+
+  if (requiredRole && user.role !== requiredRole) {
+    return <Navigate to="/" replace />;
   }
 
   return children;

@@ -38,12 +38,32 @@ export async function createProduct(productData: ProductPayload): Promise<Produc
   }
 }
 
-export async function getProducts(): Promise<Product[]> {
+export async function getSellerProducts(): Promise<Product[]> {
   try {
     const response = await apiInstance.get("/seller");
-    return (response.data.products || response.data) as Product[];
+    return response.data.products as Product[];
+  } catch (error) {
+    console.error("Error fetching seller products:", error);
+    throw error;
+  }
+}
+
+export async function getProducts(): Promise<Product[]> {
+  try {
+    const response = await apiInstance.get("/");
+    return response.data.products as Product[];
   } catch (error) {
     console.error("Error fetching products:", error);
+    throw error;
+  }
+}
+
+export async function getProductById(productId: string): Promise<Product> {
+  try {
+    const response = await apiInstance.get(`/products/${productId}`);
+    return response.data.product as Product;
+  } catch (error) {
+    console.error(`Error fetching product with ID ${productId}:`, error);
     throw error;
   }
 }
