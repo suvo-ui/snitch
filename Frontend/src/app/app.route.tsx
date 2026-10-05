@@ -4,6 +4,8 @@ import Login from "../features/auth/pages/Login";
 import Protected from "../features/auth/components/Protected";
 import RequireRoleSelection from "../features/auth/components/RequireRoleSelection";
 import RoleSelection from "../features/auth/pages/RoleSelection";
+import CreateProduct from "../features/products/pages/CreateProduct";
+import Dashboard from "../features/products/pages/Dashboard";
 
 export const routes = createBrowserRouter([
   {
@@ -29,5 +31,26 @@ export const routes = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/seller",
+    children: [
+      {
+        path: "/seller/create-product",
+        element: (
+          <Protected>
+            <CreateProduct />
+          </Protected>
+        ),
+      },
+      {
+        path: "/seller/dashboard",
+        element: (
+          <Protected>
+            <Dashboard />
+          </Protected>
+        ),
+      },
+    ],
   },
 ]);
